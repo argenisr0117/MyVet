@@ -10,9 +10,9 @@ namespace MyVet.Web.Models
     {
         [EmailAddress]
         [Required]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
-        [MaxLength(6)]
+        [MinLength(6)]
         [Required]
         public string Password { get; set; }
 
