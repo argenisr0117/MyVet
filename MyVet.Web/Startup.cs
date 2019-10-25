@@ -51,6 +51,9 @@ namespace MyVet.Web
             });
 
             services.AddScoped<IUserHelper, UserHelper>(); //AddScoped se ejecuta cada vez que se llama y crea una nueva instancia de la interfaz
+            services.AddScoped<ICombosHelper, CombosHelper>();
+            services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<IImageHelper, ImageHelper>();
             services.AddTransient<SeedDb>(); //AddTrasient solo se ejecuta una vez
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
