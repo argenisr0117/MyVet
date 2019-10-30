@@ -222,7 +222,7 @@ namespace MyVet.Web.Controllers
 
             var owner = await _context.Owners.FindAsync(id.Value); //FinAsync se busca por la clave primaria de la tabla
                                                                    //No se puede utilizar include (Inner join) con este metodo
-            if (owner == null)                                     
+            if (owner == null)
             {
                 return NotFound();
             }
@@ -240,16 +240,15 @@ namespace MyVet.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPet(PetViewModel model)
         {
-            if(ModelState.IsValid) // Verifica si el modelo es valido *siempre validar el modelo*
+            if (ModelState.IsValid) // Verifica si el modelo es valido *siempre validar el modelo*
             {
                 var path = string.Empty;
                 if (model.ImageFile != null)
                 {
-                   path = await _imageHelper.UploadImageAsync(model.ImageFile);
-                    
-                }
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile);
 
-                var pet =await _converterHelper.ToPetAsync(model, path);
+                }
+                var pet = await _converterHelper.ToPetAsync(model, path, true);
                 _context.Pets.Add(pet);
                 await _context.SaveChangesAsync();
                 return RedirectToAction($"Details/{model.OwnerId}");
@@ -257,6 +256,48 @@ namespace MyVet.Web.Controllers
             return View(model);
         }
 
-        
+
+        // Edit Pet
+        public async Task<IActionResult> EditPet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pets = await _context.Pets
+                .Include(p => p.Owner)
+                .Include(p => p.PetType)
+                .FirstOrDefaultAsync(p => p.Id == id); //FinAsync se busca por la clave primaria de la tabla
+                                                      //No se puede utilizar include (Inner join) con este metodo
+            if (pets == null)
+            {
+                return NotFound();
+            }
+
+            return View(_converterHelper.ToPetViewModel(pets));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPet(PetViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var path = model.ImageUrl;
+                if (model.ImageFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile);
+
+                }
+
+                var pet = await _converterHelper.ToPetAsync(model, path, false);
+                _context.Pets.Update(pet);
+                await _context.SaveChangesAsync();
+                return RedirectToAction($"Details/{model.OwnerId}");
+            }
+
+            return View(model);
+        }
+
     }
 }

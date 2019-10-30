@@ -28,6 +28,7 @@ namespace MyVet.Web.Data.Entities
         public PetType PetType { get; set; }
 
         [Display(Name = "Born")]
+        //[DataType(DataType.DateTime)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime Born { get; set; }
