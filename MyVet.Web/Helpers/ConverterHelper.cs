@@ -21,6 +21,31 @@ namespace MyVet.Web.Helpers
             _combosHelper = combosHelper;
         }
 
+        public async Task<History> ToHistoryAsync(HistoryViewModel model, bool isNew)
+        {
+            var history = new History
+            {
+                Date = model.Date.ToUniversalTime(), //ToUniversalTime guarda la hora en horario de londres 
+                Description = model.Description,
+                Id = isNew ? 0 : model.Id,
+                Pet = await _dataContext.Pets.FindAsync(model.PetId),
+                Remarks = model.Remarks,
+                ServiceType =  await _dataContext.ServiceTypes.FindAsync(model.ServiceTypeId)
+
+            };
+
+            //if (model.Id != 0)
+            //{
+            //    pet.Id = model.Id;
+            //}
+            return history;
+        }
+
+        public HistoryViewModel ToHistoryViewModel(History history)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Pet> ToPetAsync(PetViewModel model, string path, bool isNew)
         {
             var pet = new Pet
@@ -28,7 +53,7 @@ namespace MyVet.Web.Helpers
                 Agendas = model.Agendas,
                 Born = model.Born,
                 Histories = model.Histories,
-                Id = isNew ? 0 :model.Id,
+                Id = isNew ? 0 : model.Id,
                 ImageUrl = path,
                 Name = model.Name,
                 Owner = await _dataContext.Owners.FindAsync(model.OwnerId),
@@ -41,7 +66,7 @@ namespace MyVet.Web.Helpers
             //{
             //    pet.Id = model.Id;
             //}
-                return pet;
+            return pet;
         }
 
         public PetViewModel ToPetViewModel(Pet pet)
