@@ -43,7 +43,16 @@ namespace MyVet.Web.Helpers
 
         public HistoryViewModel ToHistoryViewModel(History history)
         {
-            throw new NotImplementedException();
+            return new HistoryViewModel
+            {
+                Date = history.Date,
+                Description = history.Description,
+                Id = history.Id,
+                PetId = history.Pet.Id,
+                Remarks = history.Remarks,
+                ServiceTypeId = history.ServiceType.Id,
+                ServiceTypes=_combosHelper.GetComboServiceTypes()
+            };
         }
 
         public async Task<Pet> ToPetAsync(PetViewModel model, string path, bool isNew)

@@ -322,6 +322,44 @@ namespace MyVet.Web.Controllers
             return View(pet);
         }
 
+        // Add History
+        public async Task<IActionResult> AddHistory(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pet = await _datacontext.Pets.FindAsync(id.Value); //FinAsync se busca por la clave primaria de la tabla
+                                                                       //No se puede utilizar include (Inner join) con este metodo
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            var model = new HistoryViewModel
+            {
+                Date = DateTime.Now,
+                PetId = pet.Id,
+                ServiceTypes = _combosHelper.GetComboServiceTypes()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddHistory(HistoryViewModel model)
+        {
+            if (ModelState.IsValid) // Verifica si el modelo es valido *siempre validar el modelo*
+            {
+                var history = await _converterHelper.ToHistoryAsync(model, true);
+                _datacontext.Histories.Add(history);
+                await _datacontext.SaveChangesAsync();
+                return RedirectToAction($"DetailsPet/{model.PetId}");
+            }
+            model.ServiceTypes = _combosHelper.GetComboServiceTypes(); //Cuando se hace submit, el combo hay que volver a llenarlo.
+            return View(model);
+        }
 
     }
 }
