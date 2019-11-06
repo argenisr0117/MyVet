@@ -10,9 +10,6 @@ namespace MyVet.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        //Relationship between History and ServiceType
-        public ServiceType ServiceType { get; set; }
-
         [Display(Name = "Description")]
         [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
@@ -25,7 +22,11 @@ namespace MyVet.Web.Data.Entities
 
         //Relationship between History and Pet
         public Pet Pet { get; set; }
+
         public string Remarks { get; set; }
+
+        //Relationship between History and ServiceType
+        public ServiceType ServiceType { get; set; }
 
         [Display(Name = "Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = true)]

@@ -361,5 +361,39 @@ namespace MyVet.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> EditHistory(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var histories = await _datacontext.Histories
+                .Include(p => p.Pet)
+                .Include(p => p.ServiceType)
+                .FirstOrDefaultAsync(p => p.Id == id); //FinAsync se busca por la clave primaria de la tabla
+                                                       //No se puede utilizar include (Inner join) con este metodo
+            if (histories == null)
+            {
+                return NotFound();
+            }
+
+            return View(_converterHelper.ToHistoryViewModel(histories));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditHistory(HistoryViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var history = await _converterHelper.ToHistoryAsync(model, false);
+                _datacontext.Histories.Update(history);
+                await _datacontext.SaveChangesAsync();
+                return RedirectToAction($"DetailsPet/{model.PetId}");
+            }
+            model.ServiceTypes = _combosHelper.GetComboServiceTypes();
+            return View(model);
+        }
+
     }
 }
