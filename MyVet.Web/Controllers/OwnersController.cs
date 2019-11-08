@@ -18,7 +18,7 @@ namespace MyVet.Web.Controllers
     [Authorize(Roles = "Admin")]
     public class OwnersController : Controller
     {
-        private readonly DataContext _datacontext;
+        private readonly DataContext _dataContext;
         private readonly IUserHelper _userHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IConverterHelper _converterHelper;
@@ -31,7 +31,7 @@ namespace MyVet.Web.Controllers
             IConverterHelper converterHelper,
             IImageHelper imageHelper)
         {
-            _datacontext = context;
+            _dataContext = context;
             _userHelper = userHelper;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
@@ -41,7 +41,7 @@ namespace MyVet.Web.Controllers
         // GET: Owners
         public IActionResult Index()
         {
-            return View(_datacontext.Owners
+            return View(_dataContext.Owners
                 .Include(o => o.User)
                 .Include(o => o.Pets));
         }
@@ -54,7 +54,7 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var owner = await _datacontext.Owners
+            var owner = await _dataContext.Owners
                 .Include(o => o.User)//Esto equivale a un INNER JOIN
                 .Include(o => o.Pets)
                 .ThenInclude(p => p.PetType)
@@ -108,10 +108,10 @@ namespace MyVet.Web.Controllers
                         Pets = new List<Pet>(),
                         User = userinDB
                     };
-                    _datacontext.Owners.Add(owner);
+                    _dataContext.Owners.Add(owner);
                     try
                     {
-                        await _datacontext.SaveChangesAsync();
+                        await _dataContext.SaveChangesAsync();
                         return RedirectToAction(nameof(Index));
                     }
                     catch (Exception ex)
@@ -135,7 +135,7 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var owner = await _datacontext.Owners.FindAsync(id);
+            var owner = await _dataContext.Owners.FindAsync(id);
             if (owner == null)
             {
                 return NotFound();
@@ -159,8 +159,8 @@ namespace MyVet.Web.Controllers
             {
                 try
                 {
-                    _datacontext.Update(owner);
-                    await _datacontext.SaveChangesAsync();
+                    _dataContext.Update(owner);
+                    await _dataContext.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -186,7 +186,7 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var owner = await _datacontext.Owners
+            var owner = await _dataContext.Owners
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (owner == null)
             {
@@ -201,15 +201,20 @@ namespace MyVet.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var owner = await _datacontext.Owners.FindAsync(id);
-            _datacontext.Owners.Remove(owner);
-            await _datacontext.SaveChangesAsync();
+            var owner = await _dataContext.Owners.FindAsync(id);
+
+            if (owner.Pets.Count == 0)
+            {
+                _dataContext.Owners.Remove(owner);
+                await _dataContext.SaveChangesAsync();
+            }
+   
             return RedirectToAction(nameof(Index));
         }
 
         private bool OwnerExists(int id)
         {
-            return _datacontext.Owners.Any(e => e.Id == id);
+            return _dataContext.Owners.Any(e => e.Id == id);
         }
 
         // Add Pet
@@ -220,7 +225,7 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var owner = await _datacontext.Owners.FindAsync(id.Value); //FinAsync se busca por la clave primaria de la tabla
+            var owner = await _dataContext.Owners.FindAsync(id.Value); //FinAsync se busca por la clave primaria de la tabla
                                                                    //No se puede utilizar include (Inner join) con este metodo
             if (owner == null)
             {
@@ -249,8 +254,8 @@ namespace MyVet.Web.Controllers
 
                 }
                 var pet = await _converterHelper.ToPetAsync(model, path, true);
-                _datacontext.Pets.Add(pet);
-                await _datacontext.SaveChangesAsync();
+                _dataContext.Pets.Add(pet);
+                await _dataContext.SaveChangesAsync();
                 return RedirectToAction($"Details/{model.OwnerId}");
             }
             model.PetTypes = _combosHelper.GetComboPetTypes();
@@ -266,7 +271,7 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var pets = await _datacontext.Pets
+            var pets = await _dataContext.Pets
                 .Include(p => p.Owner)
                 .Include(p => p.PetType)
                 .FirstOrDefaultAsync(p => p.Id == id); //FinAsync se busca por la clave primaria de la tabla
@@ -292,8 +297,8 @@ namespace MyVet.Web.Controllers
                 }
 
                 var pet = await _converterHelper.ToPetAsync(model, path, false);
-                _datacontext.Pets.Update(pet);
-                await _datacontext.SaveChangesAsync();
+                _dataContext.Pets.Update(pet);
+                await _dataContext.SaveChangesAsync();
                 return RedirectToAction($"Details/{model.OwnerId}");
             }
             model.PetTypes = _combosHelper.GetComboPetTypes();
@@ -308,7 +313,7 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var pet = await _datacontext.Pets
+            var pet = await _dataContext.Pets
                 .Include(p => p.Owner)//Esto equivale a un INNER JOIN
                 .ThenInclude(o => o.User)
                 .Include(p => p.Histories)
@@ -330,7 +335,7 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var pet = await _datacontext.Pets.FindAsync(id.Value); //FinAsync se busca por la clave primaria de la tabla
+            var pet = await _dataContext.Pets.FindAsync(id.Value); //FinAsync se busca por la clave primaria de la tabla
                                                                        //No se puede utilizar include (Inner join) con este metodo
             if (pet == null)
             {
@@ -353,8 +358,8 @@ namespace MyVet.Web.Controllers
             if (ModelState.IsValid) // Verifica si el modelo es valido *siempre validar el modelo*
             {
                 var history = await _converterHelper.ToHistoryAsync(model, true);
-                _datacontext.Histories.Add(history);
-                await _datacontext.SaveChangesAsync();
+                _dataContext.Histories.Add(history);
+                await _dataContext.SaveChangesAsync();
                 return RedirectToAction($"DetailsPet/{model.PetId}");
             }
             model.ServiceTypes = _combosHelper.GetComboServiceTypes(); //Cuando se hace submit, el combo hay que volver a llenarlo.
@@ -368,7 +373,7 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var histories = await _datacontext.Histories
+            var histories = await _dataContext.Histories
                 .Include(p => p.Pet)
                 .Include(p => p.ServiceType)
                 .FirstOrDefaultAsync(p => p.Id == id); //FinAsync se busca por la clave primaria de la tabla
@@ -387,13 +392,61 @@ namespace MyVet.Web.Controllers
             if (ModelState.IsValid)
             {
                 var history = await _converterHelper.ToHistoryAsync(model, false);
-                _datacontext.Histories.Update(history);
-                await _datacontext.SaveChangesAsync();
+                _dataContext.Histories.Update(history);
+                await _dataContext.SaveChangesAsync();
                 return RedirectToAction($"DetailsPet/{model.PetId}");
             }
             model.ServiceTypes = _combosHelper.GetComboServiceTypes();
             return View(model);
         }
+
+        public async Task<IActionResult> DeleteHistory(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var history = await _dataContext.Histories
+                .Include(h => h.Pet)
+                .FirstOrDefaultAsync(h => h.Id == id.Value);
+            if (history == null)
+            {
+                return NotFound();
+            }
+
+            _dataContext.Histories.Remove(history);
+            await _dataContext.SaveChangesAsync();
+            return RedirectToAction($"{nameof(DetailsPet)}/{history.Pet.Id}");
+        }
+
+        public async Task<IActionResult> DeletePet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pet = await _dataContext.Pets
+                .Include(p => p.Owner)
+                .Include(p => p.Histories)
+                .FirstOrDefaultAsync(p => p.Id == id.Value);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            if (pet.Histories.Count > 0)
+            {
+                ModelState.AddModelError(string.Empty, "Pet cannot be deleted because it has records.");
+                return RedirectToAction($"{nameof(Details)}/{pet.Owner.Id}");
+            }
+
+            _dataContext.Pets.Remove(pet);
+            await _dataContext.SaveChangesAsync();
+            return RedirectToAction($"{nameof(Details)}/{pet.Owner.Id}");
+        }
+
 
     }
 }
