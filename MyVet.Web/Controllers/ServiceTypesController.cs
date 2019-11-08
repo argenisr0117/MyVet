@@ -125,25 +125,33 @@ namespace MyVet.Web.Controllers
             }
 
             var serviceType = await _context.ServiceTypes
+                .Include(st => st.Histories)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (serviceType == null)
             {
                 return NotFound();
             }
 
-            return View(serviceType);
-        }
-
-        // POST: ServiceTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var serviceType = await _context.ServiceTypes.FindAsync(id);
+            if (serviceType.Histories.Count > 0)
+            {
+                ModelState.AddModelError(string.Empty, "Service type cannot be removed.");
+                return RedirectToAction(nameof(Index));
+            }
             _context.ServiceTypes.Remove(serviceType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        // POST: ServiceTypes/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var serviceType = await _context.ServiceTypes.FindAsync(id);
+        //    _context.ServiceTypes.Remove(serviceType);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool ServiceTypeExists(int id)
         {

@@ -187,30 +187,41 @@ namespace MyVet.Web.Controllers
             }
 
             var owner = await _dataContext.Owners
+                .Include(o => o.User)
+                .Include(o => o.Pets)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (owner == null)
             {
                 return NotFound();
             }
 
-            return View(owner);
-        }
-
-        // POST: Owners/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var owner = await _dataContext.Owners.FindAsync(id);
-
-            if (owner.Pets.Count == 0)
+            if (owner.Pets.Count > 0)
             {
-                _dataContext.Owners.Remove(owner);
-                await _dataContext.SaveChangesAsync();
+                ModelState.AddModelError(string.Empty, "Owner cannot be deleted because it has records.");
+                return RedirectToAction(nameof(Index));
             }
-   
+
+            await _userHelper.DeleteUserAsync(owner.User.Email);
+            _dataContext.Owners.Remove(owner);
+            await _dataContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        //// POST: Owners/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var owner = await _dataContext.Owners.FindAsync(id);
+
+        //    if (owner.Pets.Count == 0)
+        //    {
+        //        _dataContext.Owners.Remove(owner);
+        //        await _dataContext.SaveChangesAsync();
+        //    }
+   
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool OwnerExists(int id)
         {
