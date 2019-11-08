@@ -84,6 +84,9 @@ namespace MyVet.Web.Helpers
             await _signInManager.SignOutAsync();
         }
 
-
+        public async Task<IdentityResult> UpdateUserAsync(User user)
+        {
+            return await _userManager.UpdateAsync(user);
+        }
     }
 }
