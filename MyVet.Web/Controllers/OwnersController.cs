@@ -135,12 +135,26 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var owner = await _dataContext.Owners.FindAsync(id);
+            var owner = await _dataContext.Owners
+                .Include(o => o.User)
+                .FirstOrDefaultAsync(o => o.Id == id.Value);
+
             if (owner == null)
             {
                 return NotFound();
             }
-            return View(owner);
+
+            var model = new EditUserViewModel
+            {
+                Address = owner.User.Address,
+                Document = owner.User.Document,
+                FirstName = owner.User.FirstName,
+                Id = owner.Id,
+                LastName = owner.User.LastName,
+                PhoneNumber = owner.User.PhoneNumber
+            };
+
+            return View(model);
         }
 
         // POST: Owners/Edit/5
@@ -148,35 +162,27 @@ namespace MyVet.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] Owner owner)
+        public async Task<IActionResult> Edit(EditUserViewModel model)
         {
-            if (id != owner.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _dataContext.Update(owner);
-                    await _dataContext.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OwnerExists(owner.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                var owner = await _dataContext.Owners
+                    .Include(o => o.User)
+                    .FirstOrDefaultAsync(o => o.Id == model.Id);
+
+                owner.User.Document = model.Document;
+                owner.User.FirstName = model.FirstName;
+                owner.User.LastName = model.LastName;
+                owner.User.Address = model.Address;
+                owner.User.PhoneNumber = model.PhoneNumber;
+
+                await _userHelper.UpdateUserAsync(owner.User);
                 return RedirectToAction(nameof(Index));
             }
-            return View(owner);
+
+            return View(model);
         }
+
 
         // GET: Owners/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -219,7 +225,7 @@ namespace MyVet.Web.Controllers
         //        _dataContext.Owners.Remove(owner);
         //        await _dataContext.SaveChangesAsync();
         //    }
-   
+
         //    return RedirectToAction(nameof(Index));
         //}
 
@@ -237,7 +243,7 @@ namespace MyVet.Web.Controllers
             }
 
             var owner = await _dataContext.Owners.FindAsync(id.Value); //FinAsync se busca por la clave primaria de la tabla
-                                                                   //No se puede utilizar include (Inner join) con este metodo
+                                                                       //No se puede utilizar include (Inner join) con este metodo
             if (owner == null)
             {
                 return NotFound();
@@ -286,7 +292,7 @@ namespace MyVet.Web.Controllers
                 .Include(p => p.Owner)
                 .Include(p => p.PetType)
                 .FirstOrDefaultAsync(p => p.Id == id); //FinAsync se busca por la clave primaria de la tabla
-                                                      //No se puede utilizar include (Inner join) con este metodo
+                                                       //No se puede utilizar include (Inner join) con este metodo
             if (pets == null)
             {
                 return NotFound();
@@ -347,7 +353,7 @@ namespace MyVet.Web.Controllers
             }
 
             var pet = await _dataContext.Pets.FindAsync(id.Value); //FinAsync se busca por la clave primaria de la tabla
-                                                                       //No se puede utilizar include (Inner join) con este metodo
+                                                                   //No se puede utilizar include (Inner join) con este metodo
             if (pet == null)
             {
                 return NotFound();
