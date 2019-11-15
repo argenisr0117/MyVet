@@ -79,6 +79,7 @@ namespace MyVet.Web.Helpers
                 model.RememberMe,
                 false);
         }
+
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
@@ -87,6 +88,14 @@ namespace MyVet.Web.Helpers
         public async Task<IdentityResult> UpdateUserAsync(User user)
         {
             return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<SignInResult> ValidatePasswordAsync(User user, string password)
+        {
+            return await _signInManager.CheckPasswordSignInAsync(
+                user,
+                password,
+                false);
         }
     }
 }

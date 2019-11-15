@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ namespace MyVet.Web.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OwnersController : ControllerBase
     {
         private readonly DataContext _dataContext;
@@ -31,18 +34,44 @@ namespace MyVet.Web.Controllers.API
                 return BadRequest(ModelState);
             }
             var owner = await _dataContext.Owners
-                .Include(o => o.Agendas)
-                .Include(o => o.Pets)
                 .Include(o => o.User)
-                .FirstOrDefaultAsync(
-                o => o.User.Email == emailRequest.Email);
+                .Include(o => o.Pets)
+                .ThenInclude(p => p.PetType)
+                .Include(o => o.Pets)
+                .ThenInclude(p => p.Histories)
+                .ThenInclude(h => h.ServiceType)
+                .FirstOrDefaultAsync(o => o.User.UserName.ToLower().Equals(emailRequest.Email.ToLower()));
 
-            if (owner == null)
+            var response = new OwnerResponse
             {
-                return NotFound();
-            }
+                FirstName = owner.User.FirstName,
+                LastName = owner.User.LastName,
+                Address = owner.User.Address,
+                Document = owner.User.Document,
+                Email = owner.User.Email,
+                PhoneNumber = owner.User.PhoneNumber,
+                Pets = owner.Pets.Select(p => new PetResponse
+                {
+                    Born = p.Born,
+                    Id = p.Id,
+                    ImageUrl = p.ImageFullPath,
+                    Name = p.Name,
+                    Race = p.Race,
+                    Remarks = p.Remarks,
+                    PetType = p.PetType.Name,
+                    Histories = p.Histories.Select(h => new HistoryResponse
+                    {
+                        Date = h.Date,
+                        Description = h.Description,
+                        Id = h.Id,
+                        Remarks = h.Remarks,
+                        ServiceType = h.ServiceType.Name
+                    }).ToList()
+                }).ToList()
+            };
 
-            return Ok(owner);
+            return Ok(response);
         }
     }
+
 }
