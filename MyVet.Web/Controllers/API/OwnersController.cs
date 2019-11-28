@@ -33,6 +33,7 @@ namespace MyVet.Web.Controllers.API
             {
                 return BadRequest(ModelState);
             }
+
             var owner = await _dataContext.Owners
                 .Include(o => o.User)
                 .Include(o => o.Pets)
@@ -41,6 +42,11 @@ namespace MyVet.Web.Controllers.API
                 .ThenInclude(p => p.Histories)
                 .ThenInclude(h => h.ServiceType)
                 .FirstOrDefaultAsync(o => o.User.UserName.ToLower().Equals(emailRequest.Email.ToLower()));
+
+            if (owner == null)
+            {
+                return NotFound();
+            }
 
             var response = new OwnerResponse
             {

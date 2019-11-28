@@ -40,10 +40,9 @@ namespace MyVet.Web.Data.Entities
 
         public ICollection<Agenda> Agendas { get; set; }
 
-        //TODO: replace the correct URL for the image
         public string ImageFullPath => string.IsNullOrEmpty(ImageUrl)
             ? null
-            : $"https://TBD.azurewebsites.net{ImageUrl.Substring(1)}";
+            : $"https://argenisvet.azurewebsites.net{ImageUrl.Substring(1)}";
 
         [Display(Name = "Date*")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
