@@ -25,6 +25,10 @@ namespace MyVet.Prism.ViewModels
             _apiService = apiService;
             Title = "Login";
             isEnabled = true;
+
+            //TODO: Delete these lines
+            Email = "jzuluaga55@hotmail.com";
+            Password = "123456";
         }
 
         #region PublicProps
@@ -120,6 +124,7 @@ namespace MyVet.Prism.ViewModels
             isRunning = false; 
             isEnabled = true;
             Password = string.Empty;
+
             await _navigationService.NavigateAsync("PetsPage", parameters);
         }
     }
