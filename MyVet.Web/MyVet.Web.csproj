@@ -18,10 +18,4 @@
     <ProjectReference Include="..\MyVet.Common\MyVet.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Microsoft.AspNetCore.Analyzers">
-      <HintPath>..\..\..\Program Files\dotnet\sdk\3.0.100\Sdks\Microsoft.NET.Sdk.Web\analyzers\cs\Microsoft.AspNetCore.Analyzers.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

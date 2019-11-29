@@ -23,10 +23,10 @@
             Text="{Binding Password}"/>
  
         <ActivityIndicator
-            IsRunning="{Binding IsRunning}"
+            IsRunning="{Binding isRunning}"
             VerticalOptions="CenterAndExpand"/>
         <Button
-            IsEnabled="{Binding IsEnabled}"
+            IsEnabled="{Binding isEnabled}"
             Command="{Binding LoginCommand}"
             Text="Login"/>
     </StackLayout>
