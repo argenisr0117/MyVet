@@ -67,7 +67,13 @@
                                 </Grid>
                                 <Image
                                 Grid.Column="2"
-                                Source="ic_chevron_right"/>
+                                Source="ic_chevron_right">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding SelectPetCommand}">
+                                        </TapGestureRecognizer>
+                                    </Image.GestureRecognizers>
+                                </Image>
                             </Grid>
                         </Frame>
                     </ViewCell>
