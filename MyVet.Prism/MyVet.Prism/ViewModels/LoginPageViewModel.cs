@@ -1,5 +1,4 @@
-﻿using System;
-using MyVet.Common.Models;
+﻿using MyVet.Common.Models;
 using MyVet.Common.Services;
 using Prism.Commands;
 using Prism.Navigation;
@@ -8,14 +7,15 @@ namespace MyVet.Prism.ViewModels
 {
     public class LoginPageViewModel : ViewModelBase
     {
-        private readonly INavigationService _navigationService;
         private readonly IApiService _apiService;
+        private readonly INavigationService _navigationService;
         #region PrivateAttrbs
-        private string _password;
-        private bool _isRunning;
+
         private bool _isEnabled;
-        private DelegateCommand _loginCommand; 
-        #endregion
+        private bool _isRunning;
+        private DelegateCommand _loginCommand;
+        private string _password;
+        #endregion PrivateAttrbs
 
         public LoginPageViewModel(
             INavigationService navigationService,
@@ -32,6 +32,7 @@ namespace MyVet.Prism.ViewModels
         }
 
         #region PublicProps
+
         //public DelegateCommand Logincommand
         //{
         //    get
@@ -44,29 +45,29 @@ namespace MyVet.Prism.ViewModels
         //    }
         //}
 
-        public DelegateCommand LoginCommand => _loginCommand ?? (_loginCommand = new DelegateCommand(Login));
         public string Email { get; set; }
-
-        //Los campos o parametros que cambian en la view, se les crea una 
-        //propiedad publica y un atributo privado
-        public string Password
+        public bool isEnabled
         {
-            get => _password;
-            set => SetProperty(ref _password, value);
+            get => _isEnabled;
+            set => SetProperty(ref _isEnabled, value);
         }
+
         public bool isRunning
         {
             get => _isRunning;
             set => SetProperty(ref _isRunning, value);
         }
 
-        public bool isEnabled
+        public DelegateCommand LoginCommand => _loginCommand ?? (_loginCommand = new DelegateCommand(Login));
+        //Los campos o parametros que cambian en la view, se les crea una
+        //propiedad publica y un atributo privado
+        public string Password
         {
-            get => _isEnabled;
-            set => SetProperty(ref _isEnabled, value);
-        } 
-        #endregion
-       
+            get => _password;
+            set => SetProperty(ref _password, value);
+        }
+        #endregion PublicProps
+
         private async void Login()
         {
             if (string.IsNullOrEmpty(Email))
@@ -91,7 +92,16 @@ namespace MyVet.Prism.ViewModels
             };
 
             var url = App.Current.Resources["UrlAPI"].ToString();
-                                                            //URL  Prefijo  Accion
+            var connection = await _apiService.CheckConnection(url);
+            if (!connection)
+            {
+                isEnabled = true;
+                isRunning = false;
+                await App.Current.MainPage.DisplayAlert("Error", "Check the internet connection.", "Accept");
+                return;
+            }
+
+            //URL  Prefijo  Accion
             var response = await _apiService.GetTokenAsync(url, "/Account", "/CreateToken", request);
 
             if (!response.IsSuccess)
@@ -103,7 +113,7 @@ namespace MyVet.Prism.ViewModels
                 return;
             }
 
-            var token = (TokenResponse)response.Result;
+            var token = response.Result;
             var response2 = await _apiService.GetOwnerByEmailAsync(url, "api", "/Owners/GetOwnerByEmail", "bearer", token.Token, Email);
 
             if (!response2.IsSuccess)
@@ -115,13 +125,13 @@ namespace MyVet.Prism.ViewModels
                 return;
             }
 
-            var owner = (OwnerResponse)response2.Result;
+            var owner = response2.Result;
             //enviar parametros de esta pagina a otra
-            var parameters = new NavigationParameters 
+            var parameters = new NavigationParameters
             {
                 { "owner", owner}
             };
-            isRunning = false; 
+            isRunning = false;
             isEnabled = true;
             Password = string.Empty;
 
@@ -129,4 +139,3 @@ namespace MyVet.Prism.ViewModels
         }
     }
 }
- 
