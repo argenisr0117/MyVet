@@ -21,6 +21,9 @@
                             CornerRadius="10"
                             HasShadow="True"
                             Margin="0,0,0,5">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectPetCommand}"/>
+                            </Frame.GestureRecognizers>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -63,16 +66,11 @@
                                     <Label 
                                     Grid.Column="1"
                                     Grid.Row="2"
-                                    Text="{Binding Born, StringFormat='{0:yyyy/MM/dd}'}}"/>
+                                    Text="{Binding Born, StringFormat='{0:yyyy/MM/dd}'}"/>
                                 </Grid>
                                 <Image
                                 Grid.Column="2"
                                 Source="ic_chevron_right">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            Command="{Binding SelectPetCommand}">
-                                        </TapGestureRecognizer>
-                                    </Image.GestureRecognizers>
                                 </Image>
                             </Grid>
                         </Frame>
