@@ -25,7 +25,7 @@ namespace MyVet.Prism.ViewModels
             {
                 { "history", this }
             };
-            await _navigationService.NavigateAsync("HistoriePage", parameters);
+            await _navigationService.NavigateAsync("HistoryPage", parameters);
         }
     }
 }

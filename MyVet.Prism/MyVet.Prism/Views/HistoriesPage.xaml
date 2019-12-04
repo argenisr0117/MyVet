@@ -4,6 +4,7 @@
              xmlns:prism="http://prismlibrary.com"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="MyVet.Prism.Views.HistoriesPage"
+             IconImageSource="ic_format_list_bulleted"
              Title="{Binding Title}">
 
     <StackLayout
