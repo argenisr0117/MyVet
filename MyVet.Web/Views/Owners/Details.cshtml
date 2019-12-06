@@ -68,7 +68,7 @@
 }
 else
 {
-    <table class="table">
+    <table class="table table-responsive">
         <thead>
             <tr>
                 <th>
@@ -105,7 +105,7 @@ else
                     @if (!string.IsNullOrEmpty(item.ImageUrl))
                     {
                         <td>
-                            <img src="@Url.Content(item.ImageUrl)" alt="petImage" style="width:200px;height:200px;max-width:100%;" />
+                            <img src="@Url.Content(item.ImageUrl)" class="img-responsive" alt="petImage" @*style="width:250px;height:200px;max-width:100%;"*@ />
 
                         </td>
                     }
