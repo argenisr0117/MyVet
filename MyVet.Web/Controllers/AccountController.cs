@@ -36,6 +36,10 @@ namespace MyVet.Web.Controllers
             return View();
         }
 
+        public IActionResult NotAuthorized()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
