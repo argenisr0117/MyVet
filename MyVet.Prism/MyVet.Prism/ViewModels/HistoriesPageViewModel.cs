@@ -16,7 +16,7 @@ namespace MyVet.Prism.ViewModels
         public HistoriesPageViewModel(
             INavigationService navigationService) : base(navigationService)
         {
-            Title = "Histories";
+            Title = "";
             _navigationService = navigationService;
             Pet = JsonConvert.DeserializeObject<PetResponse>(Settings.Pet);
             LoadHistories();

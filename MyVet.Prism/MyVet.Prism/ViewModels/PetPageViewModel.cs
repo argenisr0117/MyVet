@@ -16,7 +16,7 @@ namespace MyVet.Prism.ViewModels
         public PetPageViewModel(
             INavigationService navigationService) : base(navigationService)
         {
-            Title = "Details";
+            Title = "";
         }
         
         public PetResponse Pet

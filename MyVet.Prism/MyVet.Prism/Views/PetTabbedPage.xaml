@@ -8,7 +8,7 @@
             Title="{Binding Title}">
 
     <TabbedPage.Children>
-        <local:PetPage/>
+        <local:PetPage IconImageSource="ic_pets" HeightRequest="30" WidthRequest="50"/>
         <local:HistoriesPage/>
     </TabbedPage.Children>
 </TabbedPage>
