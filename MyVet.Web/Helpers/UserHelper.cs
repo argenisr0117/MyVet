@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using MyVet.Web.Data.Entities;
 using MyVet.Web.Models;
+using System.Threading.Tasks;
 
 namespace MyVet.Web.Helpers
 {
     public class UserHelper : IUserHelper
     {
-        private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         public UserHelper(
             UserManager<User> userManager,
@@ -24,7 +21,6 @@ namespace MyVet.Web.Helpers
             _signInManager = signInManager;
         }
 
-
         public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
             return await _userManager.CreateAsync(user, password);
@@ -33,6 +29,11 @@ namespace MyVet.Web.Helpers
         public async Task AddUserToRoleAsync(User user, string roleName)
         {
             await _userManager.AddToRoleAsync(user, roleName);
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword)
+        {
+            return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
         }
 
         public async Task CheckRoleAsync(string roleName)
@@ -47,6 +48,11 @@ namespace MyVet.Web.Helpers
             }
         }
 
+        public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
+        {
+            return await _userManager.ConfirmEmailAsync(user, token);
+        }
+
         public async Task<bool> DeleteUserAsync(string email)
         {
             var user = await GetUserByEmailAsync(email);
@@ -57,7 +63,11 @@ namespace MyVet.Web.Helpers
 
             var response = await _userManager.DeleteAsync(user);
             return response.Succeeded;
+        }
 
+        public async Task<string> GenerateEmailConfirmationTokenAsync(User user)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
@@ -65,10 +75,14 @@ namespace MyVet.Web.Helpers
             return await _userManager.FindByEmailAsync(email);
         }
 
+        public async Task<User> GetUserByIdAsync(string userId)
+        {
+            return await _userManager.FindByIdAsync(userId);
+        }
+
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
         {
             return await _userManager.IsInRoleAsync(user, roleName);
-
         }
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
@@ -97,12 +111,5 @@ namespace MyVet.Web.Helpers
                 password,
                 false);
         }
-
-        public async Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword)
-        {
-            return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
-        }
-
-
     }
 }
