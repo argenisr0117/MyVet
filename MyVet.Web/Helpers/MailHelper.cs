@@ -1,6 +1,8 @@
-﻿using MailKit.Net.Smtp;
+﻿using MailKit.Net.Proxy;
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
+using System.Net;
 
 namespace MyVet.Web.Helpers
 {
@@ -15,27 +17,36 @@ namespace MyVet.Web.Helpers
 
         public void SendMail(string to, string subject, string body)
         {
-            var from = _configuration["Mail:From"];
-            var smtp = _configuration["Mail:Smtp"];
-            var port = _configuration["Mail:Port"];
-            var password = _configuration["Mail:Password"];
-
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(from));
-            message.To.Add(new MailboxAddress(to));
-            message.Subject = subject;
-            var bodyBuilder = new BodyBuilder
+            try
             {
-                HtmlBody = body
-            };
-            message.Body = bodyBuilder.ToMessageBody();
+                var from = _configuration["Mail:From"];
+                var smtp = _configuration["Mail:Smtp"];
+                var port = _configuration["Mail:Port"];
+                var password = _configuration["Mail:Password"];
 
-            using (var client = new SmtpClient())
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress(from));
+                message.To.Add(new MailboxAddress(to));
+                message.Subject = subject;
+                var bodyBuilder = new BodyBuilder
+                {
+                    HtmlBody = body
+                };
+                message.Body = bodyBuilder.ToMessageBody();
+
+                using (var client = new SmtpClient())
+                {
+                    //var credentials = new NetworkCredential("FABIDOM\\soportet", "S@p@rt3T9");
+                    //client.ProxyClient = new Socks5Client("isaserver.lafabril.com.do", 8080, credentials);
+                    client.Connect(smtp, int.Parse(port), false);
+                    client.Authenticate(from, password);
+                    client.Send(message);
+                    client.Disconnect(true);
+                }
+            }
+            catch (System.Exception)
             {
-                client.Connect(smtp, int.Parse(port), false);
-                client.Authenticate(from, password);
-                client.Send(message);
-                client.Disconnect(true);
+                throw;
             }
         }
     }
