@@ -91,6 +91,8 @@ namespace MyVet.Web.Data
                 _dataContext.ServiceTypes.Add(new ServiceType { Name = "Consulta" });
                 _dataContext.ServiceTypes.Add(new ServiceType { Name = "Urgencia" });
                 _dataContext.ServiceTypes.Add(new ServiceType { Name = "Vacunación" });
+                _dataContext.ServiceTypes.Add(new ServiceType { Name = "Peluquería" });
+                _dataContext.ServiceTypes.Add(new ServiceType { Name = "Hospedaje" });
                 await _dataContext.SaveChangesAsync();
             }
         }
@@ -101,6 +103,9 @@ namespace MyVet.Web.Data
             {
                 _dataContext.PetTypes.Add(new PetType { Name = "Perro" });
                 _dataContext.PetTypes.Add(new PetType { Name = "Gato" });
+                _dataContext.PetTypes.Add(new PetType { Name = "Oso" });
+                _dataContext.PetTypes.Add(new PetType { Name = "Conejo" });
+                _dataContext.PetTypes.Add(new PetType { Name = "León" });
                 await _dataContext.SaveChangesAsync();
             }
         }
