@@ -34,5 +34,10 @@ namespace MyVet.Web.Helpers
         Task<IdentityResult> UpdateUserAsync(User user);
 
         Task<SignInResult> ValidatePasswordAsync(User user, string password);
+
+        Task<string> GeneratePasswordResetTokenAsync(User user);
+
+        Task<IdentityResult> ResetPasswordAsync(User user, string token, string password);
+
     }
 }
