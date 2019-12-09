@@ -183,7 +183,8 @@ namespace MyVet.Web.Data
                         {
                             _dataContext.Agendas.Add(new Agenda
                             {
-                                Date = initialDate,
+                                //ToUniversalTime: Guarda la fecha en hora de Londres. Las fechas se guardan en Universaltime y se muestran en Local Time
+                                Date = initialDate.ToUniversalTime(),
                                 IsAvailable = true
                             });
 
