@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyVet.Web.Data.Entities
 {
-    public class Agenda
+    public class Agenda 
     {
         public int Id { get; set; }
 
