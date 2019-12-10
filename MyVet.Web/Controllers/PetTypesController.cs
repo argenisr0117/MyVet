@@ -49,6 +49,18 @@ namespace MyVet.Web.Controllers
             return View();
         }
 
+        // TO-DO
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifyPetType(string petType)
+        {
+            var name = _context.PetTypes.FirstOrDefault(p => p.Name == petType);
+            if (name != null)
+            {
+                return Json($"PetType {petType} is already in use.");
+            }
+
+            return Json(true);
+        }
         // POST: PetTypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.

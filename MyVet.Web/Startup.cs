@@ -80,6 +80,7 @@ namespace MyVet.Web
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<IMailHelper, MailHelper>();
+            services.AddScoped<IAgendaHelper, AgendaHelper>();
             services.AddTransient<SeedDb>(); //AddTrasient solo se ejecuta una vez
 
 

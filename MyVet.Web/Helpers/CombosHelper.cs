@@ -15,6 +15,43 @@ namespace MyVet.Web.Helpers
         {
             _dataContext = dataContext;
         }
+
+        public IEnumerable<SelectListItem> GetComboOwners()
+        {
+            var list = _dataContext.Owners.Select(owner => new SelectListItem
+            {
+                Text = owner.User.FullNameWithDocument,
+                Value = $"{owner.Id.ToString()}"
+            })
+               .OrderBy(owner => owner.Text)
+               .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select an owner]",
+                Value = "0"
+            });
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboPets(int ownerId)
+        {
+            var list = _dataContext.Pets.Where(p => p.Owner.Id == ownerId).Select(pet => new SelectListItem
+            {
+                Text = pet.Name,
+                Value = $"{pet.Id.ToString()}"
+            })
+              .OrderBy(pet => pet.Text)
+              .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select a pet]",
+                Value = "0"
+            });
+            return list;
+        }
+
         public IEnumerable<SelectListItem> GetComboPetTypes()
         {
             //var list = new List<SelectListItem>();

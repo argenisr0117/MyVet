@@ -149,17 +149,17 @@ namespace MyVet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var owner = await _dataContext.Owners
+                var manager = await _dataContext.Managers
                     .Include(o => o.User)
                     .FirstOrDefaultAsync(o => o.Id == view.Id);
 
-                owner.User.Document = view.Document;
-                owner.User.FirstName = view.FirstName;
-                owner.User.LastName = view.LastName;
-                owner.User.Address = view.Address;
-                owner.User.PhoneNumber = view.PhoneNumber;
+                manager.User.Document = view.Document;
+                manager.User.FirstName = view.FirstName;
+                manager.User.LastName = view.LastName;
+                manager.User.Address = view.Address;
+                manager.User.PhoneNumber = view.PhoneNumber;
 
-                await _userHelper.UpdateUserAsync(owner.User);
+                await _userHelper.UpdateUserAsync(manager.User);
                 return RedirectToAction(nameof(Index));
             }
 

@@ -1,12 +1,15 @@
 ﻿@model IEnumerable<MyVet.Web.Data.Entities.Pet>
 
 @{
-    ViewData["Title"] = "Pets";
+    ViewData["Title"] = "My Pets";
 }
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 <br />
 
+<p>
+    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create New</a>
+</p>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -17,9 +20,6 @@
                 <table class="table table-hover table-responsive" id="MyTable">
                     <thead>
                         <tr>
-                            <th>
-                                Owner
-                            </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
@@ -46,9 +46,6 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Owner.User.FullName)
-                                </td>
-                                <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td>
@@ -57,7 +54,7 @@
                                 <td>
                                     @if (!string.IsNullOrEmpty(item.ImageUrl))
                                     {
-                                        <img src="@Url.Content(item.ImageUrl)" alt="Image" class="img-responsive" />
+                                        <img src="@Url.Content(item.ImageUrl)" alt="Image" style="width:150px;height:150px;max-width: 100%; height: auto;" />
                                     }
                                 </td>
                                 <td>
@@ -83,6 +80,7 @@
     </div>
 </div>
 
+<!--Delete Item-->
 <partial name="_DeleteDialog" />
 
 @section Scripts {
@@ -92,6 +90,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable();
+
             // Delete item
             var item_to_delete;
 
@@ -100,7 +99,7 @@
             });
 
             $("#btnYesDelete").click(function () {
-                window.location.href = '/Pets/Delete/' + item_to_delete;
+                window.location.href = '/Home/Delete/' + item_to_delete;
             });
         });
     </script>
