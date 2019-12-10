@@ -264,6 +264,112 @@ namespace MyVet.Web.Controllers
             return View(view);
         }
 
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> MyAgenda()
+        {
+            var agendas = await _dataContext.Agendas
+                .Include(a => a.Owner)
+                .ThenInclude(o => o.User)
+                .Include(a => a.Pet)
+                .Where(a => a.Date >= DateTime.Today.ToUniversalTime()).ToListAsync();
+
+            var list = new List<AgendaViewModel>(agendas.Select(a => new AgendaViewModel
+            {
+                Date = a.Date,
+                Id = a.Id,
+                IsAvailable = a.IsAvailable,
+                Owner = a.Owner,
+                Pet = a.Pet,
+                Remarks = a.Remarks
+            }).ToList());
+
+            list.Where(a => a.Owner != null && a.Owner.User.UserName.ToLower().Equals(User.Identity.Name.ToLower()))
+                .All(a => { a.IsMine = true; return true; });
+
+            return View(list);
+        }
+
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> Assing(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var agenda = await _dataContext.Agendas
+                .FirstOrDefaultAsync(o => o.Id == id.Value);
+            if (agenda == null)
+            {
+                return NotFound();
+            }
+
+            var owner = await _dataContext.Owners.FirstOrDefaultAsync(o => o.User.UserName.ToLower().Equals(User.Identity.Name.ToLower()));
+            if (owner == null)
+            {
+                return NotFound();
+            }
+
+            var view = new AgendaViewModel
+            {
+                Id = agenda.Id,
+                OwnerId = owner.Id,
+                Pets = _combosHelper.GetComboPets(owner.Id)
+            };
+
+            return View(view);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Assing(AgendaViewModel view)
+        {
+            if (ModelState.IsValid)
+            {
+                var agenda = await _dataContext.Agendas.FindAsync(view.Id);
+                if (agenda != null)
+                {
+                    agenda.IsAvailable = false;
+                    agenda.Owner = await _dataContext.Owners.FindAsync(view.OwnerId);
+                    agenda.Pet = await _dataContext.Pets.FindAsync(view.PetId);
+                    agenda.Remarks = view.Remarks;
+                    _dataContext.Agendas.Update(agenda);
+                    await _dataContext.SaveChangesAsync();
+                    return RedirectToAction(nameof(MyAgenda));
+                }
+            }
+
+            view.Pets = _combosHelper.GetComboPets(view.OwnerId);
+            return View(view);
+        }
+
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> Unassign(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var agenda = await _dataContext.Agendas
+                .Include(a => a.Owner)
+                .Include(a => a.Pet)
+                .FirstOrDefaultAsync(o => o.Id == id.Value);
+            if (agenda == null)
+            {
+                return NotFound();
+            }
+
+            agenda.IsAvailable = true;
+            agenda.Pet = null;
+            agenda.Owner = null;
+            agenda.Remarks = null;
+
+            _dataContext.Agendas.Update(agenda);
+            await _dataContext.SaveChangesAsync();
+            return RedirectToAction(nameof(MyAgenda));
+        }
+
 
     }
 }
