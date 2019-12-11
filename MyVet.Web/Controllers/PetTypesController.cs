@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -51,15 +52,19 @@ namespace MyVet.Web.Controllers
 
         // TO-DO
         [AcceptVerbs("GET", "POST")]
-        public IActionResult VerifyPetType(string petType)
+        public async Task <IActionResult> VerifyPetType(string Name)
         {
-            var name = _context.PetTypes.FirstOrDefault(p => p.Name == petType);
-            if (name != null)
-            {
-                return Json($"PetType {petType} is already in use.");
-            }
+            //var name = await _context.PetTypes.FirstOrDefaultAsync(p => p.Name == Name);
+            //if (name == null)
+            //{
+            //    return Json(true);
+            //}
+            //else
+            //{
+            //    return Json($"PetType {Name} is already in use.");
+            //}
+            return Json(await _context.PetTypes.FirstOrDefaultAsync(p => p.Name == Name) == null ? (object) true : $"PetType {Name} is already in use.");
 
-            return Json(true);
         }
         // POST: PetTypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

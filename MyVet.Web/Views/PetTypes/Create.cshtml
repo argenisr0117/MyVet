@@ -14,45 +14,17 @@
             <partial name="_PetType" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-sm btn-primary" />
+                <a asp-action="Index" class="btn btn-sm btn-success">Back to List</a>
             </div>
+
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index" class="btn btn-sm btn-success">Back to List</a>
-</div>
+
 
 @* TO-DO *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            if ($("#Name").val != "") {
 
-                $("#Name").keyup(function () {
-            	$.ajax({
-                	type: 'POST',
-                	url: '@Url.Action("VerifyPetType")',
-                	dataType: 'json',
-                	data: { petType: $("#Name").val() },
-                    success: function (result) {
-                        $("#Name").val = result.val;
-                    	//$("#PetId").append('<option value="0">(Select a pet...)</option>');
-                    	//$.each(pets, function (i, pet) {
-                     //   	$("#PetId").append('<option value="'
-                     //       	+ pet.id + '">'
-                     //       	+ pet.name + '</option>');
-                    	//});
-                	},
-                	error: function (ex) {
-                    	alert('Error.' + ex.statusText);
-                	}
-            	});
-            	return false;
-        	})
-            }
-        	
-    	});
-    </script>
 }
