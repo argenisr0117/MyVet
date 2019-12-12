@@ -1,5 +1,7 @@
-﻿using MyVet.Common.Models;
+﻿using MyVet.Common.Helpers;
+using MyVet.Common.Models;
 using MyVet.Common.Services;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Navigation;
 
@@ -27,7 +29,7 @@ namespace MyVet.Prism.ViewModels
             isEnabled = true;
 
             //TODO: Delete these lines
-            Email = "argenis0117@hotmail.com";
+            Email = "jzuluaga55@hotmail.com";
             Password = "123456";
         }
 
@@ -126,16 +128,19 @@ namespace MyVet.Prism.ViewModels
             }
 
             var owner = response2.Result;
+            Settings.Owner = JsonConvert.SerializeObject(owner);
+            Settings.Token = JsonConvert.SerializeObject(token);
+
             //enviar parametros de esta pagina a otra
-            var parameters = new NavigationParameters
-            {
-                { "owner", owner}
-            };
+            //var parameters = new NavigationParameters
+            //{
+            //    { "owner", owner}
+            //};
             isRunning = false;
             isEnabled = true;
             Password = string.Empty;
 
-            await _navigationService.NavigateAsync("PetsPage", parameters);
+            await _navigationService.NavigateAsync("/VeterinaryMasterDetailPage/NavigationPage/PetsPage");
         }
     }
 }
