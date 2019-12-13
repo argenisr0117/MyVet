@@ -5,6 +5,7 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              x:Class="MyVet.Prism.Views.LoginPage"
+             BackgroundColor="{StaticResource colorBackground}"
              Title="{Binding Title}">
     <ScrollView>
         <AbsoluteLayout>
@@ -27,15 +28,22 @@
                     IsPassword="True"
                     Placeholder="Password..."
                     Text="{Binding Password}"/>
-                <Button
-                    BorderRadius="23"
-                    BackgroundColor="#2282C0"
-                    IsEnabled="{Binding isEnabled}"
-                    Command="{Binding LoginCommand}"
-                    HeightRequest="46"
-                    Text="Login"
-                    TextColor="White"
-                    VerticalOptions="EndAndExpand"/>
+               
+                <StackLayout
+            	Orientation="Horizontal"
+                    VerticalOptions="EndAndExpand">
+                    <Button
+                        IsEnabled="{Binding isEnabled}"
+                        Command="{Binding LoginCommand}"
+                        Text="Login"/>
+                    <Button
+                        Command="{Binding RegisterCommand}"
+                	    HorizontalOptions="FillAndExpand"
+                	    IsEnabled="{Binding IsEnabled}"
+                	    Style="{StaticResource secondaryButton}"
+                	    Text="Register"/>
+                </StackLayout>
+
             </StackLayout>
             <busyindicator:SfBusyIndicator
                 AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
@@ -47,7 +55,7 @@
                 VerticalOptions="Center"
                 ViewBoxWidth = "80" 
                 ViewBoxHeight="80"
-                TextColor="#2282C0"
+                TextColor="{StaticResource colorPrimary}"
                 Title="Loading..."/>
         </AbsoluteLayout>
     </ScrollView>

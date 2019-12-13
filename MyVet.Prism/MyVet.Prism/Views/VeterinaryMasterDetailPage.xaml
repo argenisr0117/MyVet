@@ -3,7 +3,8 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                   xmlns:prism="http://prismlibrary.com"
                   prism:ViewModelLocator.AutowireViewModel="True"
-                  x:Class="MyVet.Prism.Views.VeterinaryMasterDetailPage">
+                  x:Class="MyVet.Prism.Views.VeterinaryMasterDetailPage"
+                  BackgroundColor="{StaticResource colorBackground}">
 
     <MasterDetailPage.Master>
         <ContentPage
