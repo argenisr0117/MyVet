@@ -8,7 +8,7 @@
         <ResourceDictionary>
 
             <!-- Parameters -->
-            <x:String x:Key="UrlAPI">https://argenisvet.azurewebsites.net</x:String>
+            <x:String x:Key="UrlAPI">https://myvetrd.azurewebsites.net</x:String>
             <!-- Colors -->
             <Color x:Key="colorBackground">#F2F2F2</Color>
             <Color x:Key="colorPrimary">#0468BF</Color>

@@ -4,6 +4,7 @@ using MyVet.Common.Services;
 using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Navigation;
+using System;
 
 namespace MyVet.Prism.ViewModels
 {
@@ -16,6 +17,7 @@ namespace MyVet.Prism.ViewModels
         private bool _isEnabled;
         private bool _isRunning;
         private DelegateCommand _loginCommand;
+        private DelegateCommand _registerCommand;
         private string _password;
         #endregion PrivateAttrbs
 
@@ -27,6 +29,7 @@ namespace MyVet.Prism.ViewModels
             _apiService = apiService;
             Title = "Login";
             isEnabled = true;
+            isRemember = true;
 
             //TODO: Delete these lines
             Email = "jzuluaga55@hotmail.com";
@@ -48,6 +51,8 @@ namespace MyVet.Prism.ViewModels
         //}
 
         public string Email { get; set; }
+
+        public bool isRemember { get; set; }
         public bool isEnabled
         {
             get => _isEnabled;
@@ -61,6 +66,10 @@ namespace MyVet.Prism.ViewModels
         }
 
         public DelegateCommand LoginCommand => _loginCommand ?? (_loginCommand = new DelegateCommand(Login));
+
+        public DelegateCommand RegisterCommand => _registerCommand ?? (_registerCommand = new DelegateCommand(Register));
+
+
         //Los campos o parametros que cambian en la view, se les crea una
         //propiedad publica y un atributo privado
         public string Password
@@ -141,6 +150,11 @@ namespace MyVet.Prism.ViewModels
             Password = string.Empty;
 
             await _navigationService.NavigateAsync("/VeterinaryMasterDetailPage/NavigationPage/PetsPage");
+        }
+
+        private async void Register()
+        {
+            await _navigationService.NavigateAsync("RegisterPage");
         }
     }
 }

@@ -31,7 +31,7 @@ namespace MyVet.Web.Data
             await CheckOwnerAsync(customer);
             await CheckManagerAsync(manager);
             await CheckPetsAsync();
-            //await CheckAgendasAsync();
+            await CheckAgendasAsync();
         }
 
         private async Task CheckRoles()
@@ -173,7 +173,7 @@ namespace MyVet.Web.Data
             if (!_dataContext.Agendas.Any())
             {
                 var initialDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 8, 0, 0);
-                var finalDate = initialDate.AddYears(1);
+                var finalDate = initialDate.AddMonths(1);
                 while (initialDate < finalDate)
                 {
                     if (initialDate.DayOfWeek != DayOfWeek.Sunday)

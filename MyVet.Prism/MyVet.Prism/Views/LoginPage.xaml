@@ -13,37 +13,53 @@
                 AbsoluteLayout.LayoutBounds="0,0,1,1"
                 AbsoluteLayout.LayoutFlags="All"
                 Padding="10">
-                <Image 
+                <Image
                     HeightRequest="200"
-                    Source="logo"/>
+                    Source="logo" />
                 <Label
-                    Text="Email"/>
+                    Text="Email" />
                 <Entry
                     Keyboard="Email"
                     Placeholder="Email..."
-                    Text="{Binding Email}"/>
+                    Text="{Binding Email}" />
                 <Label
-                    Text="Password"/>
+                    Text="Password" />
                 <Entry
                     IsPassword="True"
                     Placeholder="Password..."
-                    Text="{Binding Password}"/>
-               
+                    Text="{Binding Password}" />
+                <StackLayout
+	                    HorizontalOptions="Center"
+	                    Orientation="Horizontal">               
+                    <Label
+    	                Text="Remember me" 
+                        VerticalOptions="Center"/>
+                    <CheckBox
+    	                IsChecked="{Binding isRemember}" />
+                </StackLayout>
+                <Label
+	                HorizontalOptions="Center"
+	                Text="Forgot your password?"
+	                TextColor="{StaticResource colorAccent}">       
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+
                 <StackLayout
             	Orientation="Horizontal"
                     VerticalOptions="EndAndExpand">
                     <Button
                         IsEnabled="{Binding isEnabled}"
                         Command="{Binding LoginCommand}"
-                        Text="Login"/>
+                        Text="Login" />
                     <Button
                         Command="{Binding RegisterCommand}"
                 	    HorizontalOptions="FillAndExpand"
                 	    IsEnabled="{Binding IsEnabled}"
                 	    Style="{StaticResource secondaryButton}"
-                	    Text="Register"/>
+                	    Text="Register" />
                 </StackLayout>
-
             </StackLayout>
             <busyindicator:SfBusyIndicator
                 AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
@@ -53,10 +69,10 @@
                 HorizontalOptions="Center"
                 IsVisible="{Binding isRunning}"
                 VerticalOptions="Center"
-                ViewBoxWidth = "80" 
+                ViewBoxWidth = "80"
                 ViewBoxHeight="80"
                 TextColor="{StaticResource colorPrimary}"
-                Title="Loading..."/>
+                Title="Loading..." />
         </AbsoluteLayout>
     </ScrollView>
 </ContentPage>
