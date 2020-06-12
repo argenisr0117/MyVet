@@ -116,18 +116,18 @@
                 	Text="Register"
                 	VerticalOptions="EndAndExpand"/>
             </StackLayout>
-            <busyindicator:SfBusyIndicator  
-            	AnimationType="Gear"
-            	AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
-            	AbsoluteLayout.LayoutFlags="All"
-            	BackgroundColor="{StaticResource colorSecondary}"
-            	HorizontalOptions="Center"
-            	TextColor="{StaticResource colorFontInverse}"
-            	IsVisible="{Binding IsRunning}"
-            	Title="Loading..."
-            	VerticalOptions="Center"
-            	ViewBoxWidth="80"
-            	ViewBoxHeight="80" />
+            <busyindicator:SfBusyIndicator
+                AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+                AbsoluteLayout.LayoutFlags="All"
+                AnimationType="SingleCircle"
+                BackgroundColor="Transparent"
+                HorizontalOptions="Center"
+                IsVisible="{Binding isRunning}"
+                VerticalOptions="Center"
+                ViewBoxWidth = "80"
+                ViewBoxHeight="80"
+                TextColor="{StaticResource colorPrimary}"
+                Title="Loading..." />
         </AbsoluteLayout>
     </ScrollView>
 

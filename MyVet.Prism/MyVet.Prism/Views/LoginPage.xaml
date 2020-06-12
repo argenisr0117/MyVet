@@ -56,7 +56,7 @@
                     <Button
                         Command="{Binding RegisterCommand}"
                 	    HorizontalOptions="FillAndExpand"
-                	    IsEnabled="{Binding IsEnabled}"
+                	    IsEnabled="{Binding isEnabled}"
                 	    Style="{StaticResource secondaryButton}"
                 	    Text="Register" />
                 </StackLayout>

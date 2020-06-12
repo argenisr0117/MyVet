@@ -20,7 +20,7 @@ namespace MyVet.Prism.ViewModels
             IApiService apiService) : base(navigationService)
         {
             Title = "Register new user";
-            IsEnabled = true;
+            isEnabled = true;
             _navigationService = navigationService;
             _apiService = apiService;
         }
@@ -30,13 +30,13 @@ namespace MyVet.Prism.ViewModels
         public string Email { get; set; }
         public string FirstName { get; set; }
 
-        public bool IsEnabled
+        public bool isEnabled
         {
             get => _isEnabled;
             set => SetProperty(ref _isEnabled, value);
         }
 
-        public bool IsRunning
+        public bool isRunning
         {
             get => _isRunning;
             set => SetProperty(ref _isRunning, value);
@@ -56,8 +56,8 @@ namespace MyVet.Prism.ViewModels
                 return;
             }
 
-            IsRunning = true;
-            IsEnabled = false;
+            isRunning = true;
+            isEnabled = false;
 
             var request = new UserRequest
             {
@@ -77,8 +77,8 @@ namespace MyVet.Prism.ViewModels
                 "/Account",
                 request);
 
-            IsRunning = false;
-            IsEnabled = true;
+            isRunning = false;
+            isEnabled = true;
 
             if (!response.IsSuccess)
             {

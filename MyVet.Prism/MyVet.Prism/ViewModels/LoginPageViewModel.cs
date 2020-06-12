@@ -18,6 +18,7 @@ namespace MyVet.Prism.ViewModels
         private bool _isRunning;
         private DelegateCommand _loginCommand;
         private DelegateCommand _registerCommand;
+        private DelegateCommand _forgotpasswordCommand;
         private string _password;
         #endregion PrivateAttrbs
 
@@ -68,7 +69,7 @@ namespace MyVet.Prism.ViewModels
         public DelegateCommand LoginCommand => _loginCommand ?? (_loginCommand = new DelegateCommand(Login));
 
         public DelegateCommand RegisterCommand => _registerCommand ?? (_registerCommand = new DelegateCommand(Register));
-
+        public DelegateCommand ForgotPasswordCommand => _forgotpasswordCommand ?? (_forgotpasswordCommand = new DelegateCommand(ForgotPassword));
 
         //Los campos o parametros que cambian en la view, se les crea una
         //propiedad publica y un atributo privado
@@ -156,5 +157,11 @@ namespace MyVet.Prism.ViewModels
         {
             await _navigationService.NavigateAsync("RegisterPage");
         }
+
+        private async void ForgotPassword()
+        {
+            await _navigationService.NavigateAsync("RecoverPasswordPage");
+        }
+
     }
 }
