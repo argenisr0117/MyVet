@@ -5,8 +5,10 @@ namespace MyVet.Common.Services
 {
     public interface IApiService
     {
+        Task<bool> CheckConnection(string url);
+
         Task<Response<OwnerResponse>> GetOwnerByEmailAsync(
-            string urlBase,
+                    string urlBase,
             string servicePrefix,
             string controller,
             string tokenType,
@@ -19,6 +21,10 @@ namespace MyVet.Common.Services
             string controller,
             TokenRequest request);
 
-        Task<bool> CheckConnection(string url);
+        Task<Response<object>> RegisterUserAsync(
+            string urlBase,
+            string servicePrefix,
+            string controller,
+            UserRequest userRequest);
     }
 }
