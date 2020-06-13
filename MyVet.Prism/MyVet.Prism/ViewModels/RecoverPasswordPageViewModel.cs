@@ -1,10 +1,9 @@
-﻿using MyVet.Common.Services;
+﻿using MyVet.Common.Helpers;
+using MyVet.Common.Models;
+using MyVet.Common.Services;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyVet.Prism.ViewModels
 {
@@ -25,7 +24,6 @@ namespace MyVet.Prism.ViewModels
             Title = "Recover password";
             isEnabled = true;
         }
-
 
         public DelegateCommand RecoverCommand => _recoverCommand ?? (_recoverCommand = new DelegateCommand(Recover));
 
@@ -73,14 +71,14 @@ namespace MyVet.Prism.ViewModels
             {
                 await App.Current.MainPage.DisplayAlert(
                    "Error",
-                    "",
-                    "");
+                    response.Message,
+                    "Accept");
                 return;
             }
 
             await App.Current.MainPage.DisplayAlert(
-                "Error",
-                "You must enter a valid email",
+                "Ok",
+                response.Message,
                 "Accept");
             await _navigationService.GoBackAsync();
         }

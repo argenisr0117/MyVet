@@ -67,7 +67,6 @@ namespace MyVet.Prism.ViewModels
         }
 
         public DelegateCommand LoginCommand => _loginCommand ?? (_loginCommand = new DelegateCommand(Login));
-
         public DelegateCommand RegisterCommand => _registerCommand ?? (_registerCommand = new DelegateCommand(Register));
         public DelegateCommand ForgotPasswordCommand => _forgotpasswordCommand ?? (_forgotpasswordCommand = new DelegateCommand(ForgotPassword));
 
@@ -140,7 +139,7 @@ namespace MyVet.Prism.ViewModels
             var owner = response2.Result;
             Settings.Owner = JsonConvert.SerializeObject(owner);
             Settings.Token = JsonConvert.SerializeObject(token);
-
+            Settings.isRemembered = isRemember;
             //enviar parametros de esta pagina a otra
             //var parameters = new NavigationParameters
             //{

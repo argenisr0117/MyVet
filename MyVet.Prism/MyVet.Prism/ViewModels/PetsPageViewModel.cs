@@ -16,7 +16,7 @@ namespace MyVet.Prism.ViewModels
         public PetsPageViewModel(
             INavigationService navigationService) : base(navigationService)
         {
-            Title = "Pets";
+            Title = "Pets of:";
             _navigationService = navigationService;
             LoadPets();
         }
@@ -56,6 +56,7 @@ namespace MyVet.Prism.ViewModels
 
             _token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
             _owner = JsonConvert.DeserializeObject<OwnerResponse>(Settings.Owner);
+            Title= $"Pets of: {_owner.FullName}";
 
             Pets = new ObservableCollection<PetItemViewModel>(_owner.Pets.Select(p => new PetItemViewModel(_navigationService)
             {
