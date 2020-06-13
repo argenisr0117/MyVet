@@ -8,7 +8,7 @@ namespace MyVet.Common.Services
         Task<bool> CheckConnection(string url);
 
         Task<Response<OwnerResponse>> GetOwnerByEmailAsync(
-                    string urlBase,
+            string urlBase,
             string servicePrefix,
             string controller,
             string tokenType,
@@ -21,11 +21,13 @@ namespace MyVet.Common.Services
             string controller,
             TokenRequest request);
 
-        Task<Response<object>> RegisterUserAsync(
+        Task<Response<object>> PutAsync<T>(
             string urlBase,
             string servicePrefix,
             string controller,
-            UserRequest userRequest);
+            T model,
+            string tokenType,
+            string accessToken);
 
         Task<Response<object>> RecoverPasswordAsync(
             string urlBase,
@@ -33,5 +35,10 @@ namespace MyVet.Common.Services
             string controller,
             EmailRequest emailRequest);
 
+        Task<Response<object>> RegisterUserAsync(
+            string urlBase,
+            string servicePrefix,
+            string controller,
+            UserRequest userRequest);
     }
 }

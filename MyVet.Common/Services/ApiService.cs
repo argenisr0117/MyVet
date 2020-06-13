@@ -115,26 +115,42 @@ namespace MyVet.Common.Services
             }
         }
 
-        public async Task<Response<object>> RegisterUserAsync(
+        public async Task<Response<object>> PutAsync<T>(
             string urlBase,
             string servicePrefix,
             string controller,
-            UserRequest userRequest)
+            T model,
+            string tokenType,
+            string accessToken)
         {
             try
             {
-                var request = JsonConvert.SerializeObject(userRequest);
+                var request = JsonConvert.SerializeObject(model);
                 var content = new StringContent(request, Encoding.UTF8, "application/json");
                 var client = new HttpClient
                 {
                     BaseAddress = new Uri(urlBase)
                 };
 
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
                 var url = $"{servicePrefix}{controller}";
-                var response = await client.PostAsync(url, content);
+                var response = await client.PutAsync(url, content);
                 var answer = await response.Content.ReadAsStringAsync();
-                var obj = JsonConvert.DeserializeObject<Response<object>>(answer);
-                return obj;
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response<object>
+                    {
+                        IsSuccess = false,
+                        Message = answer,
+                    };
+                }
+
+                var obj = JsonConvert.DeserializeObject<T>(answer);
+                return new Response<object>
+                {
+                    IsSuccess = true,
+                    Result = obj,
+                };
             }
             catch (Exception ex)
             {
@@ -177,5 +193,35 @@ namespace MyVet.Common.Services
             }
         }
 
+        public async Task<Response<object>> RegisterUserAsync(
+                            string urlBase,
+            string servicePrefix,
+            string controller,
+            UserRequest userRequest)
+        {
+            try
+            {
+                var request = JsonConvert.SerializeObject(userRequest);
+                var content = new StringContent(request, Encoding.UTF8, "application/json");
+                var client = new HttpClient
+                {
+                    BaseAddress = new Uri(urlBase)
+                };
+
+                var url = $"{servicePrefix}{controller}";
+                var response = await client.PostAsync(url, content);
+                var answer = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<Response<object>>(answer);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                return new Response<object>
+                {
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+            }
+        }
     }
 }
