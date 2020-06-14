@@ -3,11 +3,8 @@ using MyVet.Common.Models;
 using MyVet.Common.Services;
 using Newtonsoft.Json;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyVet.Prism.ViewModels
@@ -20,6 +17,7 @@ namespace MyVet.Prism.ViewModels
         private bool _isEnabled;
         private OwnerResponse _owner;
         private DelegateCommand _saveCommand;
+        private DelegateCommand _changePasswordCommand;
 
         public ProfilePageViewModel(
             INavigationService navigationService,
@@ -33,7 +31,7 @@ namespace MyVet.Prism.ViewModels
         }
 
         public DelegateCommand SaveCommand => _saveCommand ?? (_saveCommand = new DelegateCommand(Save));
-
+        public DelegateCommand ChangePasswordCommand => _changePasswordCommand ?? (_changePasswordCommand = new DelegateCommand(ChangePassword));
         public OwnerResponse Owner
         {
             get => _owner;
@@ -104,14 +102,13 @@ namespace MyVet.Prism.ViewModels
                "User updated successfully",
                "Accept");
             //await _navigationService.GoBackAsync();
-
         }
 
         private async Task<bool> ValidateData()
         {
             if (string.IsNullOrEmpty(Owner.Document))
             {
-                await App.Current.MainPage.DisplayAlert("Error","You must enter a document", "Accept");
+                await App.Current.MainPage.DisplayAlert("Error", "You must enter a document", "Accept");
                 return false;
             }
 
@@ -135,8 +132,10 @@ namespace MyVet.Prism.ViewModels
 
             return true;
         }
+
+        private void ChangePassword()
+        {
+            _navigationService.NavigateAsync("ChangePasswordPage");
+        }
     }
 }
-
-    
-

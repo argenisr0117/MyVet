@@ -20,37 +20,37 @@
                     </Grid.ColumnDefinitions>
 
                     <Label
-                	Grid.Row="0"
-                	Grid.Column="0"
-                	Text="Document"
-                	VerticalOptions="Center" />
+                	    Grid.Row="0"
+                	    Grid.Column="0"
+                	    Text="Document"
+                	    VerticalOptions="Center" />
                     <Entry
-                	Grid.Row="0"
-                	Grid.Column="1"
-                	Placeholder="Document"
-                	Text="{Binding Owner.Document}" />
+                	    Grid.Row="0"
+                	    Grid.Column="1"
+                	    Placeholder="Document"
+                	    Text="{Binding Owner.Document}" />
 
                     <Label
-                	Grid.Row="1"
-                	Grid.Column="0"
-                	Text="FirstName"
-                	VerticalOptions="Center" />
+                	    Grid.Row="1"
+                	    Grid.Column="0"
+                	    Text="FirstName"
+                	    VerticalOptions="Center" />
                     <Entry
-                	Grid.Row="1"
-                	Grid.Column="1"
-                	Placeholder="First Name"
-                	Text="{Binding Owner.FirstName}" />
+                	    Grid.Row="1"
+                	    Grid.Column="1"
+                	    Placeholder="First Name"
+                	    Text="{Binding Owner.FirstName}" />
 
                     <Label
-                	Grid.Row="2"
-                	Grid.Column="0"
-                	Text="LastName"
-                	VerticalOptions="Center" />
+                	    Grid.Row="2"
+                	    Grid.Column="0"
+                	    Text="LastName"
+                	    VerticalOptions="Center" />
                     <Entry
-                	Grid.Row="2"
-                	Grid.Column="1"
-                	Placeholder="Last Name"
-                	Text="{Binding Owner.LastName}" />
+                	    Grid.Row="2"
+                	    Grid.Column="1"
+                	    Placeholder="Last Name"
+                	    Text="{Binding Owner.LastName}" />
 
                     <Label
                 	    Grid.Row="3"
@@ -89,7 +89,7 @@
                 	    HorizontalOptions="FillAndExpand"
                 	    IsEnabled="{Binding isEnabled}"
                 	    Style="{StaticResource secondaryButton}"
-                	    Text="ChangePassword" />
+                	    Text="Change Password" />
                 </StackLayout>
             </StackLayout>
             <busyindicator:SfBusyIndicator
