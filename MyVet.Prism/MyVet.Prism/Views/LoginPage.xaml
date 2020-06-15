@@ -47,7 +47,7 @@
                 </Label>
 
                 <StackLayout
-            	Orientation="Horizontal"
+            	    Orientation="Horizontal"
                     VerticalOptions="EndAndExpand">
                     <Button
                         IsEnabled="{Binding isEnabled}"

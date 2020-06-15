@@ -12,7 +12,7 @@ namespace MyVet.Prism.Droid
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(10);
             StartActivity(typeof(MainActivity));
         }
     }

@@ -7,6 +7,9 @@
              x:Class="MyVet.Prism.Views.PetsPage"
              BackgroundColor="{StaticResource colorBackground}"
              Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="ic_action_add_circle" Command="{Binding AddPetCommand}"/>
+    </ContentPage.ToolbarItems>
     <StackLayout
         Padding="10">
         <!--HasUnevenRows: allow rows to be of different sizes-->
