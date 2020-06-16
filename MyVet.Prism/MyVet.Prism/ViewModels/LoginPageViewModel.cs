@@ -108,24 +108,40 @@ namespace MyVet.Prism.ViewModels
             {
                 isEnabled = true;
                 isRunning = false;
-                await App.Current.MainPage.DisplayAlert("Error", "Check the internet connection.", "Accept");
+                await App.Current.MainPage.DisplayAlert(
+                    "Error", 
+                    "Check the internet connection.", 
+                    "Accept");
                 return;
             }
 
             //URL  Prefijo  Accion
-            var response = await _apiService.GetTokenAsync(url, "/Account", "/CreateToken", request);
+            var response = await _apiService.GetTokenAsync(
+                url, 
+                "/Account", 
+                "/CreateToken", 
+                request);
 
             if (!response.IsSuccess)
             {
                 isRunning = false;
                 isEnabled = true;
-                await App.Current.MainPage.DisplayAlert("Error", "Email or password invalid.", "Accept");
+                await App.Current.MainPage.DisplayAlert(
+                    "Error", 
+                    "Email or password invalid.", 
+                    "Accept");
                 Password = string.Empty;
                 return;
             }
 
             var token = response.Result;
-            var response2 = await _apiService.GetOwnerByEmailAsync(url, "api", "/Owners/GetOwnerByEmail", "bearer", token.Token, Email);
+            var response2 = await _apiService.GetOwnerByEmailAsync(
+                url, 
+                "api", 
+                "/Owners/GetOwnerByEmail", 
+                "bearer", 
+                token.Token, 
+                Email);
 
             if (!response2.IsSuccess)
             {

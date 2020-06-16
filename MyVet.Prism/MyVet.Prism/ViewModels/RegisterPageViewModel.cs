@@ -71,6 +71,17 @@ namespace MyVet.Prism.ViewModels
             };
 
             var url = App.Current.Resources["UrlAPI"].ToString();
+            var connection = await _apiService.CheckConnection(url);
+            if (!connection)
+            {
+                isEnabled = true;
+                isRunning = false;
+                await App.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "Check the internet connection.",
+                    "Accept");
+                return;
+            }
             var response = await _apiService.RegisterUserAsync(
                 url,
                 "api",

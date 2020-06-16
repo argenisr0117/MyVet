@@ -1,9 +1,13 @@
-﻿using MyVet.Common.Models;
+﻿using MyVet.Common.Helpers;
+using MyVet.Common.Models;
+using MyVet.Common.Services;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Xamarin.Forms;
 
@@ -11,17 +15,37 @@ namespace MyVet.Prism.ViewModels
 {
     public class AddEditPetPageViewModel : ViewModelBase
     {
+        private readonly INavigationService _navigationService;
+        private readonly IApiService _apiService;
         private PetResponse _pet;
         private ImageSource _imageSource;
         private bool _isRunning;
         private bool _isEnabled;
         private bool _isEdit;
+        private ObservableCollection<PetTypeResponse> _petTypes;
+        private PetTypeResponse _petType;
 
         public AddEditPetPageViewModel(
-            INavigationService navigationService) : base(navigationService)
+            INavigationService navigationService,
+            IApiService apiService) : base(navigationService)
         {
+            _navigationService = navigationService;
+            _apiService = apiService;
             Title = "New Pet";
             isEnabled = true;
+           
+        }
+
+        public ObservableCollection<PetTypeResponse> PetTypes
+        {
+            get => _petTypes;
+            set => SetProperty(ref _petTypes, value);
+        }
+
+        public PetTypeResponse PetType
+        {
+            get => _petType;
+            set => SetProperty(ref _petType, value);
         }
 
         public bool isRunning
@@ -72,7 +96,56 @@ namespace MyVet.Prism.ViewModels
                 isEdit = false;
                 Title = "New pet";
             }
+
+            LoadPetTypesAsync();
         }
 
+        private async void LoadPetTypesAsync()
+        {
+            isEnabled = false;
+
+            var url = App.Current.Resources["UrlAPI"].ToString();
+            var connection = await _apiService.CheckConnection(url);
+            if (!connection)
+            {
+                isEnabled = true;
+                isRunning = false;
+                await App.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "Check the internet connection.",
+                    "Accept");
+
+                await _navigationService.GoBackAsync();
+                return;
+            }
+            var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
+
+            var response = await _apiService.GetListAsync<PetTypeResponse>(
+                url, 
+                "/api", 
+                "/PetTypes", 
+                "bearer", 
+                token.Token);
+
+            isEnabled = true;
+
+            if (!response.IsSuccess)
+            {
+                await App.Current.MainPage.DisplayAlert(
+                    "Error", 
+                    response.Message, 
+                    "Accept");
+                return;
+            }
+
+            var petTypes = (List<PetTypeResponse>)response.Result;
+            PetTypes = new ObservableCollection<PetTypeResponse>(petTypes);
+
+            if (!string.IsNullOrEmpty(Pet.PetType))
+            {
+                PetType = PetTypes.FirstOrDefault(pt => pt.Name == Pet.PetType);
+            }
+
+        }
     }
 }
