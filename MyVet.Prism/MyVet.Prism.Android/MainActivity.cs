@@ -5,6 +5,10 @@ using Prism;
 using Prism.Ioc;
 using Syncfusion.SfBusyIndicator.XForms.Droid;
 using System.Security;
+using Android.Runtime;
+using Plugin.CurrentActivity;
+using Plugin.Permissions;
+
 
 namespace MyVet.Prism.Droid
 {
@@ -18,11 +22,22 @@ namespace MyVet.Prism.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
+            CrossCurrentActivity.Current.Init(this, bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
             new SfBusyIndicatorRenderer();
             LoadApplication(new App(new AndroidInitializer()));
+        }
+        public override void OnRequestPermissionsResult(
+            int requestCode,
+            string[] permissions,
+            [GeneratedEnum] Permission[] grantResults)
+        {
+            PermissionsImplementation.Current.OnRequestPermissionsResult(
+                requestCode,
+                permissions,
+                grantResults);
         }
     }
 

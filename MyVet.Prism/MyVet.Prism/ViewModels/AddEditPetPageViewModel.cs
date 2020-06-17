@@ -2,6 +2,8 @@
 using MyVet.Common.Models;
 using MyVet.Common.Services;
 using Newtonsoft.Json;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -9,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MyVet.Prism.ViewModels
@@ -24,6 +27,9 @@ namespace MyVet.Prism.ViewModels
         private bool _isEdit;
         private ObservableCollection<PetTypeResponse> _petTypes;
         private PetTypeResponse _petType;
+        private MediaFile _file;
+        private DelegateCommand _changeImageCommand;
+        private DelegateCommand _saveCommand;
 
         public AddEditPetPageViewModel(
             INavigationService navigationService,
@@ -35,6 +41,9 @@ namespace MyVet.Prism.ViewModels
             isEnabled = true;
            
         }
+
+        public DelegateCommand ChangeImageCommand => _changeImageCommand ?? (_changeImageCommand = new DelegateCommand(ChangeImageAsync));
+        public DelegateCommand SaveCommand => _saveCommand ?? (_saveCommand = new DelegateCommand(SaveAsync));
 
         public ObservableCollection<PetTypeResponse> PetTypes
         {
@@ -147,5 +156,149 @@ namespace MyVet.Prism.ViewModels
             }
 
         }
+
+        private async void ChangeImageAsync()
+        {
+            await CrossMedia.Current.Initialize();
+
+            var source = await Application.Current.MainPage.DisplayActionSheet(
+                "Where do you want to get the picture from?",
+                "Cancel",
+                null,
+                "Gallery",
+                "Camera");
+
+            if (source == "Cancel")
+            {
+                _file = null;
+                return;
+            }
+
+            if (source == "From camera")
+            {
+                _file = await CrossMedia.Current.TakePhotoAsync(
+                    new StoreCameraMediaOptions
+                    {
+                        Directory = "Sample",
+                        Name = "test.jpg",
+                        PhotoSize = PhotoSize.Small,
+                    }
+                );
+            }
+            else
+            {
+                _file = await CrossMedia.Current.PickPhotoAsync();
+            }
+
+            if (_file != null)
+            {
+                ImageSource = ImageSource.FromStream(() =>
+                {
+                    var stream = _file.GetStream();
+                    return stream;
+                });
+            }
+        }
+
+        private async void SaveAsync()
+        {
+            var isValid = await ValidateData();
+            if (!isValid)
+            {
+                return;
+            }
+
+            isRunning = true;
+            isEnabled = false;
+
+            var url = App.Current.Resources["UrlAPI"].ToString();
+            var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
+            var owner = JsonConvert.DeserializeObject<OwnerResponse>(Settings.Owner);
+
+            byte[] imageArray = null;
+            if (_file != null)
+            {
+                imageArray = FilesHelper.ReadFully(_file.GetStream());
+            }
+
+            var petRequest = new PetRequest
+            {
+                Born = Pet.Born,
+                Id = Pet.Id,
+                ImageArray = imageArray,
+                Name = Pet.Name,
+                OwnerId = owner.Id,
+                PetTypeId = PetType.Id,
+                Race = Pet.Race,
+                Remarks = Pet.Remarks
+            };
+            var connection = await _apiService.CheckConnection(url);
+            if (!connection)
+            {
+                isEnabled = true;
+                isRunning = false;
+                await App.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "Check the internet connection.",
+                    "Accept");
+                return;
+            }
+            Response<object> response;
+
+            if (isEdit)
+            {
+                response = await _apiService.PutAsync(url, "/api", "/Pets", petRequest.Id, petRequest, "bearer", token.Token);
+            }
+            else
+            {
+                response = await _apiService.PostAsync(url, "/api", "/Pets", petRequest, "bearer", token.Token);
+            }
+
+            if (!response.IsSuccess)
+            {
+                isRunning = false;
+                isEnabled = true;
+                await App.Current.MainPage.DisplayAlert("Error", response.Message, "Accept");
+                return;
+            }
+
+            await PetsPageViewModel.GetInstance().UpdateOwnerAsync();
+
+            isRunning = false;
+            isEnabled = true;
+
+            await App.Current.MainPage.DisplayAlert(
+                "Ok",
+                string.Format("The pet has been ", isEdit ? "Edited" : "Created"),
+                "Accept");
+
+            await _navigationService.GoBackToRootAsync();
+        }
+
+        private async Task<bool> ValidateData()
+        {
+            if (string.IsNullOrEmpty(Pet.Name))
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "You must enter a name", "Accept");
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(Pet.Race))
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "You must enter a race", "Accept");
+                return false;
+            }
+
+            if (PetType == null)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "You must select a pet type", "Accept");
+                return false;
+            }
+
+            return true;
+        }
+
+
     }
 }
+
