@@ -94,7 +94,14 @@ namespace MyVet.Prism.ViewModels
             if (parameters.ContainsKey("pet"))
             {
                 Pet = parameters.GetValue<PetResponse>("pet");
-                ImageSource = Pet.ImageUrl;
+                if (!string.IsNullOrEmpty(Pet.ImageUrl))
+                {
+                    ImageSource = Pet.ImageUrl;
+                }
+                else
+                {
+                    ImageSource = "noimage";
+                }
                 isEdit = true;
                 Title = "Edit pet";
             }
@@ -174,7 +181,7 @@ namespace MyVet.Prism.ViewModels
                 return;
             }
 
-            if (source == "From camera")
+            if (source == "Camera")
             {
                 _file = await CrossMedia.Current.TakePhotoAsync(
                     new StoreCameraMediaOptions
