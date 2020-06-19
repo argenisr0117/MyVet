@@ -1,6 +1,7 @@
 ﻿using MyVet.Common.Helpers;
 using MyVet.Common.Models;
 using MyVet.Common.Services;
+using MyVet.Prism.Helpers;
 using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Navigation;
@@ -83,13 +84,19 @@ namespace MyVet.Prism.ViewModels
         {
             if (string.IsNullOrEmpty(Email))
             {
-                await App.Current.MainPage.DisplayAlert("Error", "You must enter an email.", "Accept");
+                await App.Current.MainPage.DisplayAlert("" +
+                    Languages.Error, 
+                    Languages.EmailError, 
+                    Languages.Accept);
                 return;
             }
 
             if (string.IsNullOrEmpty(Password))
             {
-                await App.Current.MainPage.DisplayAlert("Error", "You must enter a password.", "Accept");
+                await App.Current.MainPage.DisplayAlert(
+                    Languages.Error, 
+                    "You must enter a password.",
+                     Languages.Accept);
                 return;
             }
 
@@ -109,9 +116,9 @@ namespace MyVet.Prism.ViewModels
                 isEnabled = true;
                 isRunning = false;
                 await App.Current.MainPage.DisplayAlert(
-                    "Error", 
+                     Languages.Error, 
                     "Check the internet connection.", 
-                    "Accept");
+                     Languages.Accept);
                 return;
             }
 
@@ -127,9 +134,9 @@ namespace MyVet.Prism.ViewModels
                 isRunning = false;
                 isEnabled = true;
                 await App.Current.MainPage.DisplayAlert(
-                    "Error", 
+                     Languages.Error, 
                     "Email or password invalid.", 
-                    "Accept");
+                     Languages.Accept);
                 Password = string.Empty;
                 return;
             }
@@ -147,7 +154,10 @@ namespace MyVet.Prism.ViewModels
             {
                 isRunning = false;
                 isEnabled = true;
-                await App.Current.MainPage.DisplayAlert("Error", "There's a problem.", "Accept");
+                await App.Current.MainPage.DisplayAlert(
+                    Languages.Error, 
+                    "There's a problem.",
+                    Languages.Accept);
                 Password = string.Empty;
                 return;
             }
