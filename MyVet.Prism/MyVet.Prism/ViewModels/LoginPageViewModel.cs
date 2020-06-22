@@ -95,8 +95,8 @@ namespace MyVet.Prism.ViewModels
             {
                 await App.Current.MainPage.DisplayAlert(
                     Languages.Error, 
-                    "You must enter a password.",
-                     Languages.Accept);
+                    Languages.PasswordError,
+                    Languages.Accept);
                 return;
             }
 
@@ -117,7 +117,7 @@ namespace MyVet.Prism.ViewModels
                 isRunning = false;
                 await App.Current.MainPage.DisplayAlert(
                      Languages.Error, 
-                    "Check the internet connection.", 
+                     Languages.ConnectionError, 
                      Languages.Accept);
                 return;
             }
@@ -135,7 +135,7 @@ namespace MyVet.Prism.ViewModels
                 isEnabled = true;
                 await App.Current.MainPage.DisplayAlert(
                      Languages.Error, 
-                    "Email or password invalid.", 
+                     Languages.LoginError, 
                      Languages.Accept);
                 Password = string.Empty;
                 return;
@@ -156,7 +156,7 @@ namespace MyVet.Prism.ViewModels
                 isEnabled = true;
                 await App.Current.MainPage.DisplayAlert(
                     Languages.Error, 
-                    "There's a problem.",
+                    Languages.ProblemError,
                     Languages.Accept);
                 Password = string.Empty;
                 return;

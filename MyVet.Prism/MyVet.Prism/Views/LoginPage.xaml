@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
              prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:i18n="clr-namespace:MyVet.Prism.Helpers"
              xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              x:Class="MyVet.Prism.Views.LoginPage"
              BackgroundColor="{StaticResource colorBackground}"
@@ -17,29 +18,29 @@
                     HeightRequest="200"
                     Source="logo" />
                 <Label
-                    Text="Email"/>
+                    Text="{i18n:Translate Email}"/>
                 <Entry
                     Keyboard="Email"
-                    Placeholder="Email..."
+                    Placeholder="{i18n:Translate EmailPlaceholder}"
                     Text="{Binding Email}"/>
                 <Label
                     Text="Password" />
                 <Entry
                     IsPassword="True"
-                    Placeholder="Password..."
+                    Placeholder="{i18n:Translate PasswordPlaceholder}"
                     Text="{Binding Password}" />
                 <StackLayout
 	                    HorizontalOptions="Center"
 	                    Orientation="Horizontal">               
                     <Label
-    	                Text="Remember me" 
+    	                Text="{i18n:Translate Rememberme}" 
                         VerticalOptions="Center"/>
                     <CheckBox
     	                IsChecked="{Binding isRemember}" />
                 </StackLayout>
                 <Label
 	                HorizontalOptions="Center"
-	                Text="Forgot your password?"
+	                Text="{i18n:Translate ForgotPassword}"
 	                TextColor="{StaticResource colorAccent}">       
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" />
@@ -52,13 +53,13 @@
                     <Button
                         IsEnabled="{Binding isEnabled}"
                         Command="{Binding LoginCommand}"
-                        Text="Login" />
+                        Text="{i18n:Translate Login}" />
                     <Button
                         Command="{Binding RegisterCommand}"
                 	    HorizontalOptions="FillAndExpand"
                 	    IsEnabled="{Binding isEnabled}"
                 	    Style="{StaticResource secondaryButton}"
-                	    Text="Register" />
+                	    Text="{i18n:Translate ButtomRegister}" />
                 </StackLayout>
             </StackLayout>
             <busyindicator:SfBusyIndicator
@@ -72,7 +73,7 @@
                 ViewBoxWidth = "80"
                 ViewBoxHeight="80"
                 TextColor="{StaticResource colorPrimary}"
-                Title="Loading..." />
+                Title="{i18n:Translate LoadingIndicator}" />
         </AbsoluteLayout>
     </ScrollView>
 </ContentPage>

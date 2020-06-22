@@ -118,60 +118,51 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>Aceitar</value>
   </data>
   <data name="EmailError" xml:space="preserve">
-    <value>You must enter an email.</value>
+    <value>Você precisa inserir o seu endereço de email.</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Erro</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
   <data name="EmailPlaceholder" xml:space="preserve">
-    <value>Enter an email.</value>
+    <value>Digite um e-mail.</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Senha</value>
   </data>
   <data name="PasswordPlaceholder" xml:space="preserve">
-    <value>Enter your password.</value>
+    <value>Insira sua senha</value>
   </data>
   <data name="Rememberme" xml:space="preserve">
-    <value>Remember me</value>
+    <value>Lembrar-me</value>
   </data>
   <data name="ForgotPassword" xml:space="preserve">
-    <value>Forgot your password?</value>
+    <value>Esqueceu sua senha?</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Logon</value>
   </data>
   <data name="ButtomRegister" xml:space="preserve">
-    <value>Register</value>
+    <value>Registrar</value>
   </data>
   <data name="LoadingIndicator" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Carregando...</value>
   </data>
   <data name="PasswordError" xml:space="preserve">
-    <value>You must enter a password.</value>
+    <value>É preciso inserir uma senha.</value>
   </data>
   <data name="LoginError" xml:space="preserve">
-    <value>Email or password invalid.</value>
+    <value>E-mail ou palavra-passe inválidos.</value>
   </data>
   <data name="ConnectionError" xml:space="preserve">
-    <value>Check the internet connection.</value>
+    <value>Verifique a ligação com a Internet.</value>
   </data>
   <data name="ProblemError" xml:space="preserve">
-    <value>There's a problem.</value>
-  </data>
-  <data name="CreateEditPetConfirm" xml:space="preserve">
-    <value>The pet was {0} successfully.</value>
-  </data>
-  <data name="Created" xml:space="preserve">
-    <value>Created</value>
-  </data>
-  <data name="Edited" xml:space="preserve">
-    <value>Edited</value>
+    <value>Há um problema</value>
   </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using MyVet.Common.Helpers;
 using MyVet.Common.Models;
 using MyVet.Common.Services;
+using MyVet.Prism.Helpers;
 using Newtonsoft.Json;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
@@ -127,9 +128,9 @@ namespace MyVet.Prism.ViewModels
                 isEnabled = true;
                 isRunning = false;
                 await App.Current.MainPage.DisplayAlert(
-                    "Error",
-                    "Check the internet connection.",
-                    "Accept");
+                     Languages.Error,
+                     Languages.ConnectionError,
+                     Languages.Accept);
 
                 await _navigationService.GoBackAsync();
                 return;
@@ -148,9 +149,9 @@ namespace MyVet.Prism.ViewModels
             if (!response.IsSuccess)
             {
                 await App.Current.MainPage.DisplayAlert(
-                    "Error", 
-                    response.Message, 
-                    "Accept");
+                     Languages.Error, 
+                     response.Message, 
+                     Languages.Accept);
                 return;
             }
 
@@ -245,9 +246,9 @@ namespace MyVet.Prism.ViewModels
                 isEnabled = true;
                 isRunning = false;
                 await App.Current.MainPage.DisplayAlert(
-                    "Error",
-                    "Check the internet connection.",
-                    "Accept");
+                     Languages.Error,
+                     Languages.ConnectionError,
+                     Languages.Accept);
                 return;
             }
             Response<object> response;
@@ -265,7 +266,7 @@ namespace MyVet.Prism.ViewModels
             {
                 isRunning = false;
                 isEnabled = true;
-                await App.Current.MainPage.DisplayAlert("Error", response.Message, "Accept");
+                await App.Current.MainPage.DisplayAlert( Languages.Error, response.Message,  Languages.Accept);
                 return;
             }
 
@@ -275,9 +276,9 @@ namespace MyVet.Prism.ViewModels
             isEnabled = true;
 
             await App.Current.MainPage.DisplayAlert(
-                "Ok",
-                string.Format("The pet has been ", isEdit ? "Edited" : "Created"),
-                "Accept");
+                 "Ok",
+                 string.Format(Languages.CreateEditPetConfirm, isEdit ? Languages.Edited : Languages.Created),
+                 Languages.Accept);
 
             await _navigationService.GoBackToRootAsync();
         }
@@ -286,19 +287,19 @@ namespace MyVet.Prism.ViewModels
         {
             if (string.IsNullOrEmpty(Pet.Name))
             {
-                await App.Current.MainPage.DisplayAlert("Error", "You must enter a name", "Accept");
+                await App.Current.MainPage.DisplayAlert( Languages.Error, "You must enter a name",  Languages.Accept);
                 return false;
             }
 
             if (string.IsNullOrEmpty(Pet.Race))
             {
-                await App.Current.MainPage.DisplayAlert("Error", "You must enter a race", "Accept");
+                await App.Current.MainPage.DisplayAlert( Languages.Error, "You must enter a race",  Languages.Accept);
                 return false;
             }
 
             if (PetType == null)
             {
-                await App.Current.MainPage.DisplayAlert("Error", "You must select a pet type", "Accept");
+                await App.Current.MainPage.DisplayAlert( Languages.Error, "You must select a pet type",  Languages.Accept);
                 return false;
             }
 
