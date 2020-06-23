@@ -165,7 +165,9 @@ namespace MyVet.Web.Controllers
                 FirstName = owner.User.FirstName,
                 Id = owner.Id,
                 LastName = owner.User.LastName,
-                PhoneNumber = owner.User.PhoneNumber
+                PhoneNumber = owner.User.PhoneNumber,
+                Latitude = owner.User.Latitude,
+                Longitude = owner.User.Longitude
             };
 
             return View(model);
@@ -189,6 +191,8 @@ namespace MyVet.Web.Controllers
                 owner.User.LastName = model.LastName;
                 owner.User.Address = model.Address;
                 owner.User.PhoneNumber = model.PhoneNumber;
+                owner.User.Latitude = model.Latitude;
+                owner.User.Longitude = model.Longitude;
 
                 await _userHelper.UpdateUserAsync(owner.User);
                 return RedirectToAction(nameof(Index));
@@ -196,7 +200,6 @@ namespace MyVet.Web.Controllers
 
             return View(model);
         }
-
 
         // GET: Owners/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -477,7 +480,6 @@ namespace MyVet.Web.Controllers
             await _dataContext.SaveChangesAsync();
             return RedirectToAction($"{nameof(Details)}/{pet.Owner.Id}");
         }
-
 
     }
 }

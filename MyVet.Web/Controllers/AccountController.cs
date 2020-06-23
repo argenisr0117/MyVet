@@ -352,7 +352,9 @@ namespace MyVet.Web.Controllers
                 FirstName = view.FirstName,
                 LastName = view.LastName,
                 PhoneNumber = view.PhoneNumber,
-                UserName = view.Username
+                UserName = view.Username,
+                Latitude = view.Latitude,
+                Longitude = view.Longitude
             };
 
             var result = await _userHelper.AddUserAsync(user, view.Password);

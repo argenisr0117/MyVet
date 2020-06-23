@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyVet.Web.Data.Entities
 {
-    public class User: IdentityUser
+    public class User : IdentityUser
     {
         [Display(Name = "Document")]
         [MaxLength(20, ErrorMessage = "The {0} field can not have more than {1} characters.")]
@@ -38,8 +34,5 @@ namespace MyVet.Web.Data.Entities
 
         [DisplayFormat(DataFormatString = "{0:N6}")]
         public double Longitude { get; set; }
-
     }
-
 }
-
